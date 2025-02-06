@@ -14,6 +14,7 @@ import { OperationSetEditorLauncher } from 'components/operation-set/OperationSe
 import { OperationUploaderLauncher } from 'components/uploader/OperationUploaderLauncher'
 
 import { AnnPanel } from '../components/announcement/AnnPanel'
+import { CharaUploaderLaunch } from 'components/uploader/CharaUploaderLuanch'
 
 const SOCIAL_LINKS = [
   {
@@ -75,6 +76,7 @@ export const IndexPage: ComponentType = withGlobalErrorBoundary(() => {
             <OperationEditorLauncher />
             <OperationUploaderLauncher />
             <OperationSetEditorLauncher />
+            <CharaUploaderLaunch />
           </Card>
 
           <AnnPanel className="mb-4" />

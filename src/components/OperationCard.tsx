@@ -19,6 +19,7 @@ import { useEffect } from 'react'
 import { useOperation } from 'apis/operation'
 import { AppToaster } from './Toaster'
 import { formatError } from 'utils/error'
+import { characterNamesSet } from 'store/characterNames'
 
 export const NeoOperationCard = ({operationId}:{operationId: Operation['id']}) => {
   const { data: levels } = useLevels()
@@ -247,28 +248,31 @@ export const OperationCard = ({operationId}:{operationId: Operation['id']}) => {
 
 const OperatorTags = ({ operation }: { operation: Operation }) => {
   const { opers, groups } = operation.parsedContent
-
+  
   return opers?.length || groups?.length ? (
     <div>
       {opers?.map(({ name, skill }, index) => (
-        <Tag key={index} className="mr-2 last:mr-0 mb-1 last:mb-0">
+        <Tag intent={characterNamesSet.has(name) ? "success" : "danger"} key={index} className="mr-2 last:mr-0 mb-1 last:mb-0">
           {`${name} ${skill ?? 1}`}
         </Tag>
       ))}
-      {groups?.map(({ name, opers }, index) => (
-        <Tooltip2
-          key={index}
-          className="mr-2 last:mr-0 mb-1 last:mb-0"
-          placement="top"
-          content={
-            opers
-              ?.map(({ name, skill }) => `${name} ${skill ?? 1}`)
-              .join(', ') || '无干员'
-          }
-        >
-          <Tag>[{name}]</Tag>
-        </Tooltip2>
-      ))}
+      {groups?.map(({ name, opers }, index) => {
+        const groupIntent = opers?.some(({ name }) => characterNamesSet.has(name)) ? "success" : "danger";
+        return (
+          <Tooltip2
+            key={index}
+            className="mr-2 last:mr-0 mb-1 last:mb-0"
+            placement="top"
+            content={
+              opers
+                ?.map(({ name, skill }) => `${name} ${skill ?? 1}`)
+                .join(', ') || '无干员'
+            }
+          >
+            <Tag intent={groupIntent}>[{name}]</Tag>
+          </Tooltip2>
+        )
+      })}
     </div>
   ) : (
     <div className="text-gray-500">无记录</div>
